@@ -133,7 +133,7 @@ Both frontend and backend are deployed on Render.
 
 ## Screenshots
 
-*todo: add after final deploy*
+![Task Tracker Dashboard](client/public/Screenshot%202026-06-28%20131155.png)
 
 ---
 
