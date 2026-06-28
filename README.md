@@ -133,7 +133,7 @@ Both frontend and backend are deployed on Render.
 
 ## Screenshots
 
-*todo: add after final deploy*
+client/public/Screenshot 2026-06-28 131155.png
 
 ---
 
