@@ -1,174 +1,143 @@
 # Task Tracker
 
-A full-stack task management application built with the MERN stack. Create, organize, and track tasks with filtering, sorting, search, and a responsive dark/light UI.
+A simple task management app I built using React and Node.js. Nothing fancy — just a clean way to create, edit, delete and organize tasks with some nice filtering and dark mode thrown in.
 
-## Tech Stack
+**Live:** [Frontend (Vercel)](https://task-tracker-client-wes5.onrender.com) | [API (Render)](https://task-tracker-api-wes5.onrender.com)
 
-**Frontend:** React 18, React Router, Axios, React Hot Toast, React Icons, Vite  
-**Backend:** Node.js, Express, Mongoose, Express Validator, Helmet, Morgan  
-**Database:** MongoDB Atlas  
+---
 
-## Features
+## What it does
 
-- Full CRUD operations for tasks
-- Search across task titles and descriptions
-- Filter by status and priority
-- Sort by date, due date, priority, or title
-- Pagination
-- Dark mode with system preference detection
-- Toast notifications on actions
-- Confirmation modal before deleting
-- Responsive design (mobile, tablet, desktop)
-- Form validation on both frontend and backend
-- Loading and empty states
-- Overdue task indicators
+- Create, update, delete tasks
+- Search tasks by title or description
+- Filter by status (pending, in-progress, completed) and priority
+- Sort by date, due date, priority, title
+- Paginated task list
+- Dark/light mode (picks up system preference)
+- Shows overdue tasks
+- Toast notifications + confirm before delete
+- Works on mobile
 
-## Installation
+## Stack
 
-### Prerequisites
+| Layer | Tech |
+|-------|------|
+| Frontend | React 18, Vite, React Router, Axios |
+| Backend | Express, Mongoose, express-validator |
+| Database | MongoDB Atlas |
+| Hosting | Vercel (client) + Render (server) |
 
-- Node.js 18+
-- MongoDB Atlas account (or local MongoDB)
+---
 
-### Backend
+## Running locally
+
+You'll need Node 18+ and a MongoDB instance (Atlas free tier works fine).
+
+**Backend:**
 
 ```bash
 cd server
 npm install
 cp .env.example .env
-# Edit .env with your MongoDB URI
+# fill in MONGODB_URI
 npm run dev
 ```
 
-### Frontend
+**Frontend:**
 
 ```bash
 cd client
 npm install
-cp .env.example .env
-# Edit .env if backend runs on a different URL
 npm run dev
 ```
 
-## Environment Variables
+Vite proxies `/api` to `localhost:5000` in dev mode so no extra config needed.
 
-### Server (`server/.env`)
+## Env variables
 
-| Variable | Description |
-|----------|-------------|
-| `PORT` | Server port (default: 5000) |
-| `MONGODB_URI` | MongoDB connection string |
-| `NODE_ENV` | `development` or `production` |
-| `CLIENT_URL` | Frontend origin for CORS |
-
-### Client (`client/.env`)
-
-| Variable | Description |
-|----------|-------------|
-| `VITE_API_URL` | Backend API base URL |
-
-## Folder Structure
-
+**server/.env**
 ```
-├── client/
-│   ├── src/
-│   │   ├── components/      # Reusable UI components
-│   │   │   └── ui/          # Base UI primitives
-│   │   ├── constants/       # App-wide constants
-│   │   ├── context/         # React context providers
-│   │   ├── hooks/           # Custom hooks
-│   │   ├── layouts/         # Page layouts
-│   │   ├── pages/           # Route-level pages
-│   │   ├── services/        # API service layer
-│   │   ├── styles/          # Global CSS
-│   │   └── utils/           # Helper functions
-│   └── public/
-├── server/
-│   └── src/
-│       ├── config/          # Database configuration
-│       ├── controllers/     # Request handlers
-│       ├── middleware/       # Express middleware
-│       ├── models/          # Mongoose schemas
-│       ├── routes/          # API route definitions
-│       ├── services/        # Business logic
-│       └── validators/      # Input validation rules
-└── README.md
+PORT=5000
+MONGODB_URI=mongodb+srv://...
+NODE_ENV=development
+CLIENT_URL=http://localhost:5173
 ```
 
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/tasks` | List tasks (with filters, sorting, pagination) |
-| GET | `/api/tasks/stats` | Get task count by status |
-| GET | `/api/tasks/:id` | Get single task |
-| POST | `/api/tasks` | Create a new task |
-| PUT | `/api/tasks/:id` | Update a task |
-| DELETE | `/api/tasks/:id` | Delete a task |
-
-### Query Parameters (GET /api/tasks)
-
-| Param | Type | Description |
-|-------|------|-------------|
-| `status` | string | Filter by status |
-| `priority` | string | Filter by priority |
-| `search` | string | Search in title/description |
-| `sortBy` | string | Sort field (createdAt, dueDate, priority, title) |
-| `order` | string | asc or desc |
-| `page` | number | Page number |
-| `limit` | number | Items per page (max 50) |
-
-### Response Format
-
-```json
-{
-  "success": true,
-  "data": {},
-  "message": "Optional message",
-  "pagination": {
-    "page": 1,
-    "limit": 12,
-    "total": 25,
-    "pages": 3
-  }
-}
+**client/.env** (only needed in production)
 ```
+VITE_API_URL=https://your-backend.onrender.com/api
+```
+
+---
+
+## Project structure
+
+```
+client/
+  src/
+    components/     → TaskCard, StatsBar, Filters, etc.
+    components/ui/  → Spinner, Modal, Badge (reusable bits)
+    context/        → TaskContext, ThemeContext
+    pages/          → Dashboard, TaskForm
+    services/       → axios API layer
+    hooks/          → useDebounce
+    constants/      → status/priority enums
+    styles/         → single CSS file
+
+server/
+  src/
+    controllers/    → request handlers
+    services/       → business logic (queries, pagination)
+    models/         → Task schema
+    routes/         → /api/tasks endpoints
+    validators/     → express-validator rules
+    middleware/     → error handler, validation runner
+    config/         → db connection
+```
+
+## API
+
+All endpoints are under `/api/tasks`:
+
+```
+GET    /api/tasks          → list (supports ?status, ?priority, ?search, ?sortBy, ?order, ?page, ?limit)
+GET    /api/tasks/stats    → count by status
+GET    /api/tasks/:id      → single task
+POST   /api/tasks          → create
+PUT    /api/tasks/:id      → update
+DELETE /api/tasks/:id      → delete
+```
+
+Responses follow `{ success, data, message, pagination }` format.
+
+---
 
 ## Deployment
 
-### Frontend (Vercel)
+**Frontend → Vercel:**
+- Import this repo, set root directory to `client`
+- Build command: `npm run build`, output: `dist`
+- Add env: `VITE_API_URL` = your Render backend URL + `/api`
 
-1. Push the `client` folder to a Git repository
-2. Import the repo in Vercel
-3. Set build command: `npm run build`
-4. Set output directory: `dist`
-5. Add `VITE_API_URL` environment variable pointing to your deployed backend
+**Backend → Render:**
+- New Web Service, root directory `server`
+- Build: `npm install`, Start: `npm start`
+- Env vars: `MONGODB_URI`, `NODE_ENV=production`, `CLIENT_URL=<your vercel url>`
 
-### Backend (Render)
+**Database → MongoDB Atlas** (free M0 cluster, whitelist 0.0.0.0/0 for Render)
 
-1. Push the `server` folder to a Git repository
-2. Create a new Web Service on Render
-3. Set build command: `npm install`
-4. Set start command: `npm start`
-5. Add environment variables: `MONGODB_URI`, `NODE_ENV=production`, `CLIENT_URL`
-
-### Database (MongoDB Atlas)
-
-1. Create a free cluster at [mongodb.com](https://www.mongodb.com/atlas)
-2. Create a database user
-3. Whitelist your backend IP (or 0.0.0.0/0 for Render)
-4. Copy the connection string to `MONGODB_URI`
+---
 
 ## Screenshots
 
-> Add screenshots here after deployment
+*todo: add after final deploy*
 
-## Future Improvements
+---
 
-- User authentication
-- Task categories/labels
-- Drag-and-drop task reordering
-- Subtasks and checklists
-- Email reminders for due dates
-- Activity log / audit trail
-- Export tasks as CSV
+## What I'd add next
+
+- Auth (JWT or session based)
+- Labels/categories for tasks
+- Drag and drop reordering
+- Subtasks
+- Due date email reminders
