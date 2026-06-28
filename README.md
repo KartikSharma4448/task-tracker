@@ -2,7 +2,7 @@
 
 A simple task management app I built using React and Node.js. Nothing fancy — just a clean way to create, edit, delete and organize tasks with some nice filtering and dark mode thrown in.
 
-**Live:** [Frontend (Vercel)](https://task-tracker-client-wes5.onrender.com) | [API (Render)](https://task-tracker-api-wes5.onrender.com)
+**Live:** [Frontend](https://task-tracker-client-wes5.onrender.com) | [API](https://task-tracker-api-wes5.onrender.com)
 
 ---
 
@@ -25,7 +25,7 @@ A simple task management app I built using React and Node.js. Nothing fancy — 
 | Frontend | React 18, Vite, React Router, Axios |
 | Backend | Express, Mongoose, express-validator |
 | Database | MongoDB Atlas |
-| Hosting | Vercel (client) + Render (server) |
+| Hosting | Render (both frontend and backend) |
 
 ---
 
@@ -114,15 +114,18 @@ Responses follow `{ success, data, message, pagination }` format.
 
 ## Deployment
 
-**Frontend → Vercel:**
-- Import this repo, set root directory to `client`
-- Build command: `npm run build`, output: `dist`
-- Add env: `VITE_API_URL` = your Render backend URL + `/api`
+Both frontend and backend are deployed on Render.
 
-**Backend → Render:**
-- New Web Service, root directory `server`
+**Frontend (Static Site):**
+- Root directory: `client`
+- Build command: `npm install && npm run build`
+- Publish directory: `dist`
+- Env: `VITE_API_URL` = your Render backend URL + `/api`
+
+**Backend (Web Service):**
+- Root directory: `server`
 - Build: `npm install`, Start: `npm start`
-- Env vars: `MONGODB_URI`, `NODE_ENV=production`, `CLIENT_URL=<your vercel url>`
+- Env vars: `MONGODB_URI`, `NODE_ENV=production`, `CLIENT_URL=<your frontend url>`
 
 **Database → MongoDB Atlas** (free M0 cluster, whitelist 0.0.0.0/0 for Render)
 
